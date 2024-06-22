@@ -525,9 +525,9 @@ NavigationMenuItem.displayName = ITEM_NAME;
 
 const TRIGGER_NAME = "NavigationMenuTrigger";
 
-type NavigationMenuTriggerElement = React.ElementRef<typeof Primitive.button>;
+type NavigationMenuTriggerElement = React.ElementRef<typeof Primitive.span>;
 type PrimitiveButtonProps = React.ComponentPropsWithoutRef<
-  typeof Primitive.button
+  typeof Primitive.span
 >;
 
 interface NavigationMenuTriggerProps extends PrimitiveButtonProps {}
@@ -536,7 +536,7 @@ const NavigationMenuTrigger = React.forwardRef<
   NavigationMenuTriggerElement,
   NavigationMenuTriggerProps
 >((props: ScopedProps<NavigationMenuTriggerProps>, forwardedRef) => {
-  const { __scopeNavigationMenu, disabled, ...triggerProps } = props;
+  const { __scopeNavigationMenu, ...triggerProps } = props;
   const context = useNavigationMenuContext(
     TRIGGER_NAME,
     props.__scopeNavigationMenu,
@@ -564,10 +564,10 @@ const NavigationMenuTrigger = React.forwardRef<
         value={itemContext.value}
       >
         <FocusGroupItem asChild>
-          <Primitive.button
+          <Primitive.span
             id={triggerId}
-            disabled={disabled}
-            data-disabled={disabled ? "" : undefined}
+            //disabled={disabled}
+            //data-disabled={disabled ? "" : undefined}
             data-state={getOpenState(open)}
             aria-expanded={open}
             aria-controls={contentId}
@@ -581,7 +581,7 @@ const NavigationMenuTrigger = React.forwardRef<
               props.onPointerMove,
               whenMouse(() => {
                 if (
-                  disabled ||
+                  //disabled ||
                   wasClickCloseRef.current ||
                   itemContext.wasEscapeCloseRef.current ||
                   hasPointerMoveOpenedRef.current
@@ -594,7 +594,7 @@ const NavigationMenuTrigger = React.forwardRef<
             onPointerLeave={composeEventHandlers(
               props.onPointerLeave,
               whenMouse(() => {
-                if (disabled) return;
+                //if (disabled) return;
                 context.onTriggerLeave();
                 hasPointerMoveOpenedRef.current = false;
               }),
@@ -775,6 +775,11 @@ const NavigationMenuIndicatorImpl = React.forwardRef<
     size: number;
     offset: number;
   } | null>(null);
+
+  const [prevPosition, setPrevPosition] = React.useState<{
+    size: number;
+    offset: number;
+  } | null>(null);
   const isHorizontal = context.orientation === "horizontal";
   const isVisible = Boolean(context.value);
 
@@ -800,8 +805,15 @@ const NavigationMenuIndicatorImpl = React.forwardRef<
       });
     }
   };
-  useResizeObserver(activeTrigger, handlePositionChange);
-  useResizeObserver(context.indicatorTrack, handlePositionChange);
+
+  useResizeObserver(activeTrigger, () => {
+    handlePositionChange();
+    setPrevPosition(position);
+  });
+  useResizeObserver(context.indicatorTrack, () => {
+    handlePositionChange();
+    setPrevPosition(position);
+  });
 
   // We need to wait for the indicator position to be available before rendering to
   // snap immediately into position rather than transitioning from initial
@@ -878,27 +890,28 @@ const NavigationMenuContent = React.forwardRef<
   };
 
   return !context.viewport ? (
-    <Presence present={forceMount || open}>
-      <NavigationMenuContentImpl
-        data-state={getOpenState(open)}
-        {...commonProps}
-        ref={composedRefs}
-        onPointerEnter={composeEventHandlers(
-          props.onPointerEnter,
-          context.onContentEnter,
-        )}
-        onPointerLeave={composeEventHandlers(
-          props.onPointerLeave,
-          whenMouse(context.onContentLeave),
-        )}
-        style={{
-          // Prevent interaction when animating out
-          pointerEvents: !open && context.isRootMenu ? "none" : undefined,
-          ...commonProps.style,
-        }}
-      />
-    </Presence>
+    //<Presence present={forceMount || open}>
+    <NavigationMenuContentImpl
+      data-state={getOpenState(open)}
+      {...commonProps}
+      ref={composedRefs}
+      onPointerEnter={composeEventHandlers(
+        props.onPointerEnter,
+        context.onContentEnter,
+      )}
+      onPointerLeave={composeEventHandlers(
+        props.onPointerLeave,
+        whenMouse(context.onContentLeave),
+      )}
+      style={{
+        // Prevent interaction when animating out
+        display: !open ? "none" : undefined,
+        pointerEvents: !open && context.isRootMenu ? "none" : undefined,
+        ...commonProps.style,
+      }}
+    />
   ) : (
+    //</Presence>
     <ViewportContentMounter
       forceMount={forceMount}
       {...commonProps}
@@ -1289,7 +1302,7 @@ const FocusGroup = React.forwardRef<FocusGroupElement, FocusGroupProps>(
 const ARROW_KEYS = ["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"];
 const FOCUS_GROUP_ITEM_NAME = "FocusGroupItem";
 
-type FocusGroupItemElement = React.ElementRef<typeof Primitive.button>;
+type FocusGroupItemElement = React.ElementRef<typeof Primitive.span>;
 
 interface FocusGroupItemProps extends PrimitiveButtonProps {}
 
@@ -1306,7 +1319,7 @@ const FocusGroupItem = React.forwardRef<
 
   return (
     <FocusGroupCollection.ItemSlot scope={__scopeNavigationMenu}>
-      <Primitive.button
+      <Primitive.span
         {...groupProps}
         ref={forwardedRef}
         onKeyDown={composeEventHandlers(props.onKeyDown, (event) => {
