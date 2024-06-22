@@ -1,6 +1,6 @@
 {
-  "name": "radix-navigation-menu",
-  "version": "1.0.0",
+  "name": "@robbo23/radix-react-navigation-menu",
+  "version": "1.0.1",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -14,6 +14,10 @@
         "default": "./dist/index.js"
       }
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robbo23/radix-react-navigation-menu.git"
   },
   "source": "./src/index.ts",
   "main": "./dist/index.js",
