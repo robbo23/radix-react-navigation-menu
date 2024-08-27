@@ -1,6 +1,3 @@
-//@ts-ignore
-/// <reference types="resize-observer-browser" />
-
 import { composeEventHandlers } from "@radix-ui/primitive";
 import { createCollection } from "@radix-ui/react-collection";
 import { composeRefs, useComposedRefs } from "@radix-ui/react-compose-refs";
@@ -776,7 +773,7 @@ const NavigationMenuIndicatorImpl = React.forwardRef<
     offset: number;
   } | null>(null);
 
-  const [prevPosition, setPrevPosition] = React.useState<{
+  const [, setPrevPosition] = React.useState<{
     size: number;
     offset: number;
   } | null>(null);
@@ -1132,7 +1129,7 @@ const NavigationMenuContentImpl = React.forwardRef<
         })}
         onEscapeKeyDown={composeEventHandlers(
           props.onEscapeKeyDown,
-          (event) => {
+          () => {
             // prevent the dropdown from reopening
             // after the escape key has been pressed
             wasEscapeCloseRef.current = true;
