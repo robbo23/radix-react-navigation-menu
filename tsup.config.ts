@@ -17,8 +17,6 @@ export default defineConfig((opts) => {
     entry: [INPUT_FILE],
     format: ["esm"],
     dts: true,
-    sourcemap: true,
-    skipNodeModulesBundle: true,
     clean: true,
     esbuildOptions(options) {
       options.banner = {
