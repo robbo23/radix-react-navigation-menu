@@ -1,3 +1,4 @@
+"use client";
 export {
   createNavigationMenuScope,
   //
@@ -19,8 +20,8 @@ export {
   Link,
   Indicator,
   Content,
-  Viewport,
-} from './NavigationMenu';
+  Viewport
+} from './navigation-menu';
 export type {
   NavigationMenuProps,
   NavigationMenuSubProps,
@@ -30,5 +31,5 @@ export type {
   NavigationMenuLinkProps,
   NavigationMenuIndicatorProps,
   NavigationMenuContentProps,
-  NavigationMenuViewportProps,
-} from './NavigationMenu';
+  NavigationMenuViewportProps
+} from './navigation-menu';
